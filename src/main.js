@@ -8,55 +8,57 @@ const geral = document.querySelector('.products');
 const loading = document.querySelector('h2.loading');
 const ronnie = document.querySelector('.cart__products');
 
-const prometeuNada = new Promise((resolve, reject) => {
-  const exibition = async () => {
-    try {
-      const computador = await fetchProductsList('computador');
-      loading.remove();
-      computador.forEach((element) => {
-        geral.appendChild(createProductElement(element));
-      });
-      resolve();
-    } catch (error) {
-      geral.innerHTML = 'Algum erro ocorreu, recarregue a página e tente novamente';
-      geral.classList.add('error');
-      reject(error);
-    }
-  };
-  exibition();
-});
-
-prometeuNada.then(() => {
-  const cartAdd = async () => {
-    const buttons = await document.querySelectorAll('.product__add');
-    buttons.forEach((element) => {
-      element.addEventListener('click', async () => {
-        const fear = element.parentNode;
-        const rip = fear.querySelector('.product__id');
-        const tear = rip.innerHTML;
-        saveCartID(tear);
-        const arnold = await fetchProduct(tear);
-        const schwarzenegger = createCartProductElement(arnold);
-        ronnie.appendChild(schwarzenegger);
-      });
+const exibition = async (searchTerm = 'computador') => {
+  try {
+    const products = await fetchProductsList(searchTerm);
+    loading.remove();
+    products.forEach((element) => {
+      geral.appendChild(createProductElement(element));
     });
-  };
-  cartAdd();
-}).catch((error) => {
-  console.log(error);
-});
+    cartAdd();
+  } catch (error) {
+    geral.innerHTML = 'Algum erro ocorreu, recarregue a página e tente novamente';
+    geral.classList.add('error');
+    console.log(error);
+  }
+};
+
+const cartAdd = async () => {
+  const buttons = await document.querySelectorAll('.product__add');
+  buttons.forEach((element) => {
+    element.addEventListener('click', async () => {
+      const productId = element.parentNode.querySelector('.product__id').innerHTML;
+      saveCartID(productId);
+      const product = await fetchProduct(productId);
+      const cartProduct = createCartProductElement(product);
+      ronnie.appendChild(cartProduct);
+    });
+  });
+};
+
+exibition();
 
 const loadCart = async () => {
   const cartProducts = getSavedCartIDs();
   cartProducts.forEach((element) => {
     const loadFunction = async () => {
-      const arnold = await fetchProduct(element);
-      const schwarzenegger = createCartProductElement(arnold);
-      ronnie.appendChild(schwarzenegger);
+      const product = await fetchProduct(element);
+      const cartProduct = createCartProductElement(product);
+      ronnie.appendChild(cartProduct);
     };
     loadFunction();
   });
 };
 loadCart();
+
+const searchInput = document.getElementById('input');
+searchInput.addEventListener('keydown', async (event) => {
+  if (event.key === 'Enter') {
+    const searchTerm = searchInput.value;
+    geral.innerHTML = '';
+    loading.style.display = 'block';
+    exibition(searchTerm);
+  }
+});
 
 document.querySelector('.cep-button').addEventListener('click', searchCep);

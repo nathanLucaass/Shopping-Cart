@@ -9,13 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="naf.css">
     <script src="src/main.js" type="module" defer></script>
   </head>
   <body>
     <header class="header">
-      <div class="container-title">
         <img src="./src/imgs/logo.png" class="logo" alt="logo carrinho de compras">
-      </div>
+      <input type="text" class="input al-all" placeholder="Buscar Produtos" id="input">
       <div class="container-cartTitle">
         <i class="material-icons" style="font-size:35px;color: rgb(65, 25, 127);">shopping_cart</i>
         <span class="cart__title">Meu carrinho</span>
@@ -28,7 +28,7 @@
       <section class="cart">
         <ol class="cart__products"></ol>
         <p class="price">Subtotal <span>R$<span class="total-price">0</span></span></p>
-        <input type="text" class="cep-input" placeholder="Digite seu CEP">
+        <input type="text" class="cep-input input " placeholder="Digite seu CEP">
         <button class="cep-button cart-button">Buscar CEP</button>
         <span class="cart__address"></span>
       </section>
